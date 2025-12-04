@@ -1,0 +1,25 @@
+LOOP until Goal Reached:
+    1. READ Odometry (x, y, theta)
+    2. READ Lidar (ranges, angles)
+    
+    3. CALCULATE Angle_To_Goal
+    4. SENSOR CHECK:
+       Find minimum Lidar distance inside a 60-degree slice 
+       centered on Angle_To_Goal.
+    
+    5. STATE MACHINE UPDATE:
+       IF State is GO_TO_GOAL:
+          IF Goal_Distance < Tolerance:
+             STOP (Success)
+          ELSE IF Slice_Distance < 0.5 meters:
+             Switch State to WALL_FOLLOW
+             
+       IF State is WALL_FOLLOW:
+          IF Slice_Distance > 0.7 meters:
+             Switch State to GO_TO_GOAL
+             
+    6. EXECUTE MOTOR COMMANDS:
+       IF State is GO_TO_GOAL:
+          Drive using Proportional Controller on Distance and Angle errors.
+       IF State is WALL_FOLLOW:
+          Drive using Cross-Product Wall Follower (maintain 0.3m distance).
